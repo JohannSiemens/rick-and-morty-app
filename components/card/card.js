@@ -1,13 +1,6 @@
-export function createCharacterCard(
-  characterName,
-  imageSource,
-  status,
-  type,
-  occurences
-) {
+export function createCharacterCard(character) {
   const card = document.createElement("li");
   card.classList.add("card");
-  document.append(card);
 
   const imageContainer = document.createElement("div");
   imageContainer.classList.add("card__image-container");
@@ -15,8 +8,9 @@ export function createCharacterCard(
 
   const image = document.createElement("img");
   image.classList.add("card__image");
-  image.setAttribute("src", imageSource);
-  image.setAttribute("alt", characterName);
+  image.setAttribute("src", character.image);
+  image.setAttribute("alt", character.name);
+  imageContainer.append(image);
 
   const cardContent = document.createElement("div");
   cardContent.classList.add("card__content");
@@ -24,7 +18,7 @@ export function createCharacterCard(
 
   const h2 = document.createElement("h2");
   h2.classList.add("card__title");
-  h2.textContent = characterName;
+  h2.textContent = character.name;
   cardContent.append(h2);
 
   const descriptionList = document.createElement("dl");
@@ -38,7 +32,7 @@ export function createCharacterCard(
 
   const statusValue = document.createElement("dd");
   statusValue.classList.add("card__info-description");
-  statusValue.textContent = status;
+  statusValue.textContent = character.status;
   descriptionList.append(statusValue);
 
   const typeTitle = document.createElement("dt");
@@ -48,7 +42,7 @@ export function createCharacterCard(
 
   const typeValue = document.createElement("dd");
   typeValue.classList.add("card__info-description");
-  typeValue.textContent = type;
+  typeValue.textContent = character.type;
   descriptionList.append(typeValue);
 
   const occurencesTitle = document.createElement("dt");
@@ -58,6 +52,8 @@ export function createCharacterCard(
 
   const occurencesValue = document.createElement("dd");
   occurencesValue.classList.add("card__info-description");
-  occurencesValue.textContent = occurences;
+  occurencesValue.textContent = character.episode.length;
   descriptionList.append(occurencesValue);
+
+  return card;
 }
