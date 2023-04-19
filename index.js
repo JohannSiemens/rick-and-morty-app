@@ -9,17 +9,19 @@ const navigation = document.querySelector('[data-js="navigation"]');
 const prevButton = document.querySelector('[data-js="button-prev"]');
 const nextButton = document.querySelector('[data-js="button-next"]');
 const pagination = document.querySelector('[data-js="pagination"]');
+let currentPage = 1;
+let maxPage = 1;
+let searchQuery = "";
 
-async function fetchCharacters() {
+async function fetchCharacters(apiPage, searchQuery) {
   try {
     const characterResponse = await fetch(
-      "https://rickandmortyapi.com/api/character"
+      `https://rickandmortyapi.com/api/character?page=${apiPage}&name=${searchQuery}`
     );
     if (characterResponse.ok) {
       const characterData = await characterResponse.json();
-      const maxPage = characterData.info.pages;
-      const page = 1;
-      pagination.textContent = `${page} / ${maxPage}`;
+      maxPage = characterData.info.pages;
+      pagination.textContent = `${currentPage} / ${maxPage}`;
       const characterList = characterData.results;
       characterList.forEach((character) =>
         cardContainer.append(createCharacterCard(character))
@@ -32,12 +34,35 @@ async function fetchCharacters() {
   }
 }
 
-function nextPage(data) {}
+fetchCharacters(currentPage, searchQuery);
 
 nextButton.addEventListener("click", () => {
-  let page = 1;
+  if (currentPage === maxPage) {
+    alert("You have reached the last page");
+  } else {
+    currentPage++;
+    pagination.textContent = `${currentPage} / ${maxPage}`;
+    cardContainer.innerHTML = "";
+    fetchCharacters(currentPage, searchQuery);
+  }
 });
 
-fetchCharacters();
+prevButton.addEventListener("click", () => {
+  if (currentPage === 1) {
+    alert("You have reached the first page");
+  } else {
+    currentPage--;
+    pagination.textContent = `${currentPage} / ${maxPage}`;
+    cardContainer.innerHTML = "";
+    fetchCharacters(currentPage, searchQuery);
+  }
+});
 
-const searchQuery = "";
+searchBar.addEventListener("submit", (event) => {
+  event.preventDefault();
+  const formElements = event.target.elements;
+  const newSearchQuery = formElements.query.value;
+  cardContainer.innerHTML = "";
+  fetchCharacters(null, newSearchQuery);
+  searchBar.focus();
+});
