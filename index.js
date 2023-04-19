@@ -61,8 +61,9 @@ prevButton.addEventListener("click", () => {
 searchBar.addEventListener("submit", (event) => {
   event.preventDefault();
   const formElements = event.target.elements;
-  const newSearchQuery = formElements.query.value;
+  searchQuery = formElements.query.value;
   cardContainer.innerHTML = "";
-  fetchCharacters(null, newSearchQuery);
+  fetchCharacters(null, searchQuery);
+  currentPage = 1;
   searchBar.focus();
 });
